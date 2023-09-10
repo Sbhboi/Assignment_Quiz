@@ -17,24 +17,24 @@ quizzes = {
   ]
 }
 
-# Welcome message and quiz selection
-puts "Welcome to the Quiz Game!"
-puts "Please select a quiz:"
-quizzes.each_with_index do |(quiz, _), index|
-  puts "#{index + 1}. #{quiz.capitalize} Quiz"
-end
-quiz_choice = gets.chomp.to_i
-
-# Validating quiz choice
-if quiz_choice.between?(1, quizzes.length)
-    selected_quiz = quizzes.keys[quiz_choice - 1]
-    puts "You have selected the #{selected_quiz.capitalize} Quiz."
+loop do
+    # Welcome message and quiz selection
+    puts "Welcome to the Quiz Game!"
+    puts "Please select a quiz:"
+    quizzes.each_with_index do |(quiz, _), index|
+      puts "#{index + 1}. #{quiz.capitalize} Quiz"
+    end
+    quiz_choice = gets.chomp.to_i
   
-    # Accessing quiz questions
-    questions = quizzes[selected_quiz]
+    # Validating quiz choice
+    if quiz_choice.between?(1, quizzes.length)
+      selected_quiz = quizzes.keys[quiz_choice - 1]
+      puts "You have selected the #{selected_quiz.capitalize} Quiz."
   
-    # Quiz loop
-    loop do
+      # Accessing quiz questions
+      questions = quizzes[selected_quiz]
+  
+      # Quiz loop
       questions.each do |question_data|
         puts question_data[:question]
         user_answer = gets.chomp
@@ -44,14 +44,14 @@ if quiz_choice.between?(1, quizzes.length)
           puts "Incorrect. The correct answer is: #{question_data[:answer]}"
         end
       end
-  
-      # Option to continue or quit
-      puts "Do you want to take another quiz? (yes/no)"
-      continue_choice = gets.chomp.downcase
-      break if continue_choice == "no"
+    else
+      puts "Invalid quiz choice. Please try again."
     end
   
-    puts "Thank you for playing! Goodbye!"
-else
-    puts "Invalid quiz choice. Please try again."
-end
+    # Option to continue or quit
+    puts "Do you want to take another quiz? (yes/no)"
+    continue_choice = gets.chomp.downcase
+    break if continue_choice == "no"
+  end
+  
+  puts "Thank you for playing! Goodbye!"
