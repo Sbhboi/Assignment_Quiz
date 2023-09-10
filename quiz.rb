@@ -81,5 +81,13 @@ loop do
     break if continue_choice == "no"
   end
   
+  File.open("highscore.txt", "a") do |file|
+    file.puts "#{user_name}: #{total_score}"
+  end
+
   puts "Thank you for playing #{user_name}!"
   puts "your final score is: #{total_score} pts."
+  puts "Hi-Score"
+  File.readlines("highscore.txt").each do |line|
+    puts line
+  end
