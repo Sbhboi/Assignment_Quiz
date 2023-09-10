@@ -3,21 +3,23 @@ require 'timeout'
 # Quiz data structure
 quizzes = {
   science: [
-    { question: "What is the largest planet in our solar system?", answer: "Jupiter" },
-    { question: "What is the atomic symbol for gold?", answer: "Au" },
-    { question: "What is the process by which plants convert sunlight into energy?", answer: "Photosynthesis" }
+    { question: "What is the largest planet in our solar system?", options: ["1) Earth", "2) Mars", "3) Jupiter", "4) Venus"], answer: 3 },
+    { question: "What is the atomic symbol for gold?", options: ["1) Ag", "2) Au", "3) Fe", "4) Hg"], answer: 2 },
+    { question: "What is the process by which plants convert sunlight into energy?", options: ["1) Photosynthesis", "2) Respiration", "3) Transpiration", "4) Digestion"], answer: 1 }
   ],
   history: [
-    { question: "Who was the first President of the United States?", answer: "George Washington" },
-    { question: "In what year did World War II end?", answer: "1945" },
-    { question: "What ancient civilization built the Great Wall of China?", answer: "The Chinese civilization" }
+    { question: "Who was the first President of the United States?", options: ["1) Abraham Lincoln", "2) George Washington", "3) Thomas Jefferson", "4) John Adams"], answer: 2 },
+    { question: "In what year did World War II end?", options: ["1) 1939", "2) 1941", "3) 1945", "4) 1950"], answer: 3 },
+    { question: "What ancient civilization built the Great Wall of China?", options: ["1) Egyptian civilization", "2) Roman civilization", "3) Chinese civilization", "4) Greek civilization"], answer: 3 }
   ],
   sports: [
-    { question: "Which sport uses a shuttlecock?", answer: "Badminton" },
-    { question: "Who holds the record for the most home runs in MLB history?", answer: "Barry Bonds" },
-    { question: "In what country were the first Olympic Games held?", answer: "Greece" }
+    { question: "Which sport uses a shuttlecock?", options: ["1) Tennis", "2) Badminton", "3) Golf", "4) Cricket"], answer: 2 },
+    { question: "Who holds the record for the most home runs in MLB history?", options: ["1) Babe Ruth", "2) Hank Aaron", "3) Barry Bonds", "4) Alex Rodriguez"], answer: 3 },
+    { question: "In what country were the first Olympic Games held?", options: ["1) Greece", "2) Rome", "3) Egypt", "4) China"], answer: 1 }
   ]
 }
+
+custom_quizzes = {}
 
 puts "Welcome to the Quiz Game!"
 print "Enter your name:"
@@ -46,26 +48,30 @@ loop do
       score = 0
       questions.each do |question_data|
         puts question_data[:question]
+        puts "Options:"
+        question_data[:options].each { |option| puts option }
+
+        user_answer = nil
+        time_penalty = 0
         
         begin
             Timeout.timeout(10) do # Adjust the time limit as needed
               start_time = Time.now
-              user_answer = gets.chomp.downcase
+              user_answer = gets.chomp.to_i
               end_time = Time.now
-    
               time_taken = end_time - start_time
               time_penalty = (time_taken * 2).to_i # Adjust the penalty calculation as needed
-    
-              if user_answer == question_data[:answer].downcase
-                score += 10 - time_penalty
-                puts "Correct!"
-              else
-                puts "Incorrect. The correct answer is: #{question_data[:answer]}"
-              end
             end
-          rescue Timeout::Error
-            puts "Time's up! You didn't answer in time."
-          end
+        rescue Timeout::Error
+          puts "Time's up! You didn't answer in time."
+        end
+
+          if user_answer == question_data[:answer]
+            score += 10 - time_penalty
+            puts "Correct!"
+          else
+            puts "Incorrect. The correct answer is: #{question_data[:answer]}"
+          end 
         end
 
       total_score = total_score + score
