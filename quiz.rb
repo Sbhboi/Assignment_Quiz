@@ -17,9 +17,15 @@ quizzes = {
   ]
 }
 
+puts "Welcome to the Quiz Game!"
+print "Enter your name:"
+user_name = gets.chomp.capitalize
+puts "Fancy to play some quiz, #{user_name} ?"
+
+score = 0
+
 loop do
     # Welcome message and quiz selection
-    puts "Welcome to the Quiz Game!"
     puts "Please select a quiz:"
     quizzes.each_with_index do |(quiz, _), index|
       puts "#{index + 1}. #{quiz.capitalize} Quiz"
@@ -40,6 +46,7 @@ loop do
         user_answer = gets.chomp
         if user_answer.downcase == question_data[:answer].downcase
           puts "Correct!"
+          score += 10
         else
           puts "Incorrect. The correct answer is: #{question_data[:answer]}"
         end
@@ -54,4 +61,5 @@ loop do
     break if continue_choice == "no"
   end
   
-  puts "Thank you for playing! Goodbye!"
+  puts "Thank you for playing #{user_name}!"
+  puts "your final score is: #{score} pts."
