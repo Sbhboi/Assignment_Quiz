@@ -22,7 +22,7 @@ print "Enter your name:"
 user_name = gets.chomp.capitalize
 puts "Fancy to play some quiz, #{user_name} ?"
 
-score = 0
+total_score = 0
 
 loop do
     # Welcome message and quiz selection
@@ -41,6 +41,7 @@ loop do
       questions = quizzes[selected_quiz]
   
       # Quiz loop
+      score = 0
       questions.each do |question_data|
         puts question_data[:question]
         user_answer = gets.chomp
@@ -51,6 +52,10 @@ loop do
           puts "Incorrect. The correct answer is: #{question_data[:answer]}"
         end
       end
+
+      total_score = total_score + score
+      puts "Nice job ! Your score is: #{score} pts."
+      puts "Total score: #{total_score} pts."
     else
       puts "Invalid quiz choice. Please try again."
     end
@@ -62,4 +67,4 @@ loop do
   end
   
   puts "Thank you for playing #{user_name}!"
-  puts "your final score is: #{score} pts."
+  puts "your final score is: #{total_score} pts."
