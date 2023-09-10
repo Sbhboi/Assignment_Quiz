@@ -34,6 +34,7 @@ loop do
     quizzes.each_with_index do |(quiz, _), index|
       puts "#{index + 1}. #{quiz.capitalize} Quiz"
     end
+    puts "#{quizzes.length + 1}. Create Custom Quiz"
     quiz_choice = gets.chomp.to_i
   
     # Validating quiz choice
@@ -43,6 +44,34 @@ loop do
   
       # Accessing quiz questions
       questions = quizzes[selected_quiz]
+    elsif quiz_choice == quizzes.length + 1
+      puts "Creating Custom Quiz"
+      print "Enter the custom quiz name: "
+      custom_quiz_name = gets.chomp.downcase.to_sym
+      custom_quizzes[custom_quiz_name] = []
+
+      loop do
+        print "Enter the question (or 'done' to finish): "
+        question = gets.chomp
+        break if question.downcase == 'done'
+
+        option = []
+        4.times do |i|
+          print "Enter option #{i + 1}: "
+          option << gets.chomp
+        end
+
+        print "Enter he answer (1-4): "
+        answer = gets.chomp.to_i
+
+        custom_quizzes[custom_quiz_name] << { question: question, options: option, answer: answer }
+      end
+
+      questions = custom_quizzes[custom_quiz_name]
+    else
+      puts "Invalid quiz choice. Please retry."
+      next
+    end
   
       # Quiz loop
       score = 0
@@ -50,7 +79,6 @@ loop do
         puts question_data[:question]
         puts "Options:"
         question_data[:options].each { |option| puts option }
-
         user_answer = nil
         time_penalty = 0
         
@@ -63,26 +91,22 @@ loop do
               time_penalty = (time_taken * 2).to_i # Adjust the penalty calculation as needed
             end
         rescue Timeout::Error
-          puts "Time's up! You didn't answer in time."
+          puts "Too late ! You didn't answer in time."
         end
 
           if user_answer == question_data[:answer]
             score += 10 - time_penalty
             puts "Correct!"
           else
-            puts "Incorrect. The correct answer is: #{question_data[:answer]}"
+            puts "Boohoo, wrong. The correct answer is: #{question_data[:answer]}"
           end 
         end
 
       total_score = total_score + score
       puts "Nice job ! Your score is: #{score} pts."
       puts "Total score: #{total_score} pts."
-    else
-      puts "Invalid quiz choice. Please try again."
-    end
-  
-    # Option to continue or quit
-    puts "Do you want to take another quiz? (yes/no)"
+          
+    puts "Do you want to take another quiz? (yes/no)" # Option to continue or quit
     continue_choice = gets.chomp.downcase
     break if continue_choice == "no"
   end
