@@ -1,3 +1,5 @@
+require 'timeout'
+
 # Quiz data structure
 quizzes = {
   science: [
@@ -44,14 +46,27 @@ loop do
       score = 0
       questions.each do |question_data|
         puts question_data[:question]
-        user_answer = gets.chomp
-        if user_answer.downcase == question_data[:answer].downcase
-          puts "Correct!"
-          score += 10
-        else
-          puts "Incorrect. The correct answer is: #{question_data[:answer]}"
+        
+        begin
+            Timeout.timeout(10) do # Adjust the time limit as needed
+              start_time = Time.now
+              user_answer = gets.chomp.downcase
+              end_time = Time.now
+    
+              time_taken = end_time - start_time
+              time_penalty = (time_taken * 2).to_i # Adjust the penalty calculation as needed
+    
+              if user_answer == question_data[:answer].downcase
+                score += 10 - time_penalty
+                puts "Correct!"
+              else
+                puts "Incorrect. The correct answer is: #{question_data[:answer]}"
+              end
+            end
+          rescue Timeout::Error
+            puts "Time's up! You didn't answer in time."
+          end
         end
-      end
 
       total_score = total_score + score
       puts "Nice job ! Your score is: #{score} pts."
